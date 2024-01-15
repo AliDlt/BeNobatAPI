@@ -1,4 +1,4 @@
-const Business = require("../Models/businessSchema");
+const Business = require("../Models/businessModel");
 
 exports.getAllBusinesses = async (req, res) => {
   try {
