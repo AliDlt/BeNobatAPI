@@ -8,6 +8,8 @@ const expertSchema = new mongoose.Schema({
   price: { type: Number },
   percent: { type: Number },
   time: { type: Number },
+  profile: { type: String },
+  name: { type: String },
 });
 
 module.exports = UserBase.discriminator("Expert", expertSchema);
