@@ -2,8 +2,22 @@ const express = require("express");
 const router = express.Router();
 const businessController = require("../Controllers/businessController");
 
-router.get("/business", businessController.updateBusiness);
-router.post("/business", businessController.createBusiness);
-router.put("/business", businessController.updateBusiness);
+const { authenticationFunction } = require("../Middlewares/authMiddleware");
+
+router.get(
+  "/business",
+  authenticationFunction(),
+  businessController.getBusiness
+);
+router.post(
+  "/business",
+  authenticationFunction(),
+  businessController.createBusiness
+);
+router.put(
+  "/business",
+  authenticationFunction(),
+  businessController.updateBusiness
+);
 
 module.exports = router;

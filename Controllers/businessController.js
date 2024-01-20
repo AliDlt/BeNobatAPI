@@ -1,11 +1,40 @@
 const Business = require("../Models/businessModel");
 
-exports.getAllBusinesses = async (req, res) => {
+exports.getBusiness = async (req, res) => {
   try {
-    const businesses = await Business.find();
-    res.json(businesses);
+    const business = await Business.findOne();
+
+    if (!business) {
+      return res.status(404).json({ error: "Business not found" });
+    }
+
+    // Get base URL and port from environment variables
+    const baseURL = process.env.URL || "http://localhost";
+    const port = process.env.PORT || 3000; // Change to your default port
+
+    // Function to generate image link
+    const generateImageLink = (imageName) =>
+      `${baseURL}:${port}/public/images/statics/${imageName}`;
+
+    // Generate image links for the first business document
+    const businessWithImageLinks = {
+      ...business.toObject(),
+      logo: generateImageLink(business.logo.fileAddress),
+      headerImage: generateImageLink(business.headerImage.fileAddress),
+      bannerImages: business.bannerImages.map((banner) =>
+        generateImageLink(banner)
+      ),
+      about: {
+        ...business.about.toObject(),
+        image: generateImageLink(business.about.image),
+      },
+    };
+
+    res.json(businessWithImageLinks);
   } catch (error) {
-    res.status(500).json({ error: "Internal Server Error" });
+    res
+      .status(500)
+      .json({ message: "Internal Server Error", error: error.message });
   }
 };
 

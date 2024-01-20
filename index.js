@@ -24,8 +24,11 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+app.use("/public", express.static("public"));
+
 // routes
 app.use(require("./Routes/businessRoute"));
+app.use(require("./Routes/authRoute"));
 
 // Handle 404
 app.get("*", function (req, res) {

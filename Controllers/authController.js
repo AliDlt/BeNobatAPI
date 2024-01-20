@@ -1,38 +1,12 @@
 const User = require("../Models/userBaseModel");
 
 const { hashPassword, comparePassword } = require("../Utils/hashPassword");
-// const { generateToken, verifyToken } = require("../utils/jwt");
+const { generateToken, verifyToken } = require("../Utils/jwt");
 
 // const {
 //   sendConfirmationEmail,
 //   sendResetPassEmail,
 // } = require("../utils/nodemailer");
-
-const getUser = async (req, res) => {
-  try {
-    const userId = req.user._id;
-    const user = await User.findById(userId);
-
-    if (!user) {
-      return res
-        .status(404)
-        .json({ message: "User not found", data: null, status: false });
-    }
-
-    // const url = `${
-    //   "http://" + process.env.URL + ":" + process.env.PORT
-    // }/images/${user.profile}`;
-    // user.profile = url;
-
-    // const token = generateToken({ user }, "365d");
-
-    return res
-      .status(200)
-      .json({ message: "successful", data: user, status: true });
-  } catch (error) {
-    res.status(500).json({ message: error, data: null, status: false });
-  }
-};
 
 const registerUser = async (req, res) => {
   try {
@@ -91,6 +65,7 @@ const loginUser = async (req, res) => {
         .status(404)
         .json({ message: "User not found", data: null, status: false });
     }
+
     const passwordsMatch = await comparePassword(password, user.password);
     if (!passwordsMatch) {
       return res
@@ -98,19 +73,13 @@ const loginUser = async (req, res) => {
         .json({ message: "Invalid credentials", data: null, status: false });
     }
 
-    // const url = `${
-    //   "http://" + process.env.URL + ":" + process.env.PORT
-    // }/images/${user.profile}`;
-
-    // user.profile = url;
-
-    // const token = generateToken({ user }, "365d");
+    const token = generateToken({ user }, "365d");
 
     return res
       .status(200)
-      .json({ message: "Login successful", data: user, status: true });
+      .json({ message: "Login successful", data: token, status: true });
   } catch (error) {
-    res.status(500).json({ message: error, data: null, status: false });
+    res.status(500).json({ message: error.message, data: null, status: false });
   }
 };
 
@@ -269,7 +238,6 @@ const loginUser = async (req, res) => {
 // };
 
 module.exports = {
-  getUser,
   registerUser,
   loginUser,
   //   sendResetPassword,

@@ -1,8 +1,6 @@
 const jwt = require("jsonwebtoken");
 const { v4: uuidv4 } = require("uuid");
 
-const Token = require("../models/Token");
-
 function generateToken(payload, expiresIn) {
   try {
     const tokenId = uuidv4();
@@ -15,17 +13,7 @@ function generateToken(payload, expiresIn) {
 
 async function verifyToken(token) {
   try {
-    const decoded = jwt.verify(token, process.env.SECRET_KEY);
-
-    const isToken = await isTokenBlacklisted(decoded.jti);
-
-    if (isToken) {
-      throw new Error("Token has been revoked");
-    }
-
-    addToBlacklist(decoded.jti, decoded.userId);
-
-    return decoded;
+    return jwt.verify(token, process.env.SECRET_KEY);
   } catch (error) {
     throw error;
   }
@@ -33,41 +21,11 @@ async function verifyToken(token) {
 
 async function verifyUserToken(token) {
   try {
-    const decoded = jwt.verify(token, process.env.SECRET_KEY);
-    return decoded;
+    return jwt.verify(token, process.env.SECRET_KEY);
   } catch (error) {
     throw error;
   }
 }
-
-const isTokenBlacklisted = async (tokenId) => {
-  try {
-    const count = await Token.countDocuments({ tokenId });
-    return count > 0;
-  } catch (error) {
-    throw error;
-  }
-};
-
-const addToBlacklist = async (tokenId, userId) => {
-  try {
-    const existingToken = await Token.findOne({ tokenId });
-
-    if (!existingToken) {
-      const revokedToken = new Token({
-        tokenId,
-        userId,
-      });
-
-      await revokedToken.save();
-    } else {
-      existingToken.userId = userId;
-      await existingToken.save();
-    }
-  } catch (error) {
-    throw error;
-  }
-};
 
 module.exports = {
   generateToken,
