@@ -4,11 +4,7 @@ const businessController = require("../Controllers/businessController");
 
 const { authenticationFunction } = require("../Middlewares/authMiddleware");
 
-router.get(
-  "/business",
-  authenticationFunction(),
-  businessController.getBusiness
-);
+router.get("/business", businessController.getBusiness);
 router.post(
   "/business",
   authenticationFunction(),
