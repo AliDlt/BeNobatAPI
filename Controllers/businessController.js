@@ -1,22 +1,27 @@
 const Business = require("../Models/businessModel");
+const {
+  handleNotFound,
+  handleSuccess,
+  handleBadRequest,
+  handleServerError,
+} = require("../Utils/handlers");
+
+const generateImageLink = (imageName) => {
+  // Get base URL and port from environment variables
+  const baseURL = process.env.URL || "http://localhost";
+  const port = process.env.PORT || 3000; // Change to your default port
+
+  return `${baseURL}:${port}/public/images/statics/${imageName}`;
+};
 
 exports.getBusiness = async (req, res) => {
   try {
     const business = await Business.findOne();
 
     if (!business) {
-      return res.status(404).json({ error: "Business not found" });
+      return handleNotFound(res, "Business not found");
     }
 
-    // Get base URL and port from environment variables
-    const baseURL = process.env.URL || "http://localhost";
-    const port = process.env.PORT || 3000; // Change to your default port
-
-    // Function to generate image link
-    const generateImageLink = (imageName) =>
-      `${baseURL}:${port}/public/images/statics/${imageName}`;
-
-    // Generate image links for the first business document
     const businessWithImageLinks = {
       ...business.toObject(),
       logo: generateImageLink(business.logo.fileAddress),
@@ -30,11 +35,13 @@ exports.getBusiness = async (req, res) => {
       },
     };
 
-    res.json(businessWithImageLinks);
+    handleSuccess(
+      res,
+      "Business retrieved successfully.",
+      businessWithImageLinks
+    );
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Internal Server Error", error: error.message });
+    handleServerError(res, error);
   }
 };
 
@@ -42,18 +49,18 @@ exports.createBusiness = async (req, res) => {
   try {
     const newBusiness = new Business(req.body);
     await newBusiness.save();
-    res.status(201).json(newBusiness);
+    handleSuccess(res, "Business created successfully.", newBusiness);
   } catch (error) {
-    res.status(400).json({ error: "Bad Request" });
+    handleBadRequest(res, "Bad Request");
   }
 };
 
 exports.updateBusiness = async (req, res) => {
   try {
-    const newBusiness = req.body;
-    await Business.updateOne(newBusiness);
-    res.status(200).json(newBusiness);
+    const updatedBusiness = req.body;
+    await Business.updateOne(updatedBusiness);
+    handleSuccess(res, "Business updated successfully.", updatedBusiness);
   } catch (error) {
-    res.status(400).json({ error: "Bad Request" });
+    handleBadRequest(res, "Bad Request");
   }
 };

@@ -1,60 +1,46 @@
 const Customer = require("../../Models/customerModel");
+const {
+  handleBadRequest,
+  handleNotFound,
+  handleServerError,
+  handleSuccess,
+} = require("../../Utils/handlers");
 
-// Create a new customer
 const createCustomer = async (req, res) => {
   try {
     const newCustomer = await Customer.create(req.body);
-    res.status(201).json({
-      message: "Customer created successfully.",
-      data: newCustomer,
-      status: true,
-    });
+    handleSuccess(res, "Customer created successfully.", newCustomer);
   } catch (error) {
-    res.status(500).json({ message: error.message, data: false });
+    handleServerError(res, error);
   }
 };
 
-// Get all customers with pagination
 const getAllCustomers = async (req, res) => {
   try {
-    const { page, limit } = req.query;
+    const { page = 1, limit = 10 } = req.query;
 
     const customers = await Customer.find()
-      .skip((page - 1) * count)
+      .skip((page - 1) * limit)
       .limit(Number(limit));
 
-    res.status(200).json({
-      message: "Customers retrieved successfully.",
-      data: customers,
-      status: true,
-    });
+    handleSuccess(res, "Customers retrieved successfully.", customers);
   } catch (error) {
-    res.status(500).json({ message: error.message, data: false });
+    handleServerError(res, error);
   }
 };
 
-// Get customer by ID
 const getCustomerById = async (req, res) => {
   try {
     const customer = await Customer.findById(req.params.id);
     if (!customer) {
-      return res.status(404).json({
-        message: "Customer not found.",
-        data: null,
-        status: false,
-      });
+      return handleNotFound(res);
     }
-    res.status(200).json({
-      message: "Customer retrieved successfully.",
-      data: customer,
-      status: true,
-    });
+    handleSuccess(res, "Customer retrieved successfully.", customer);
   } catch (error) {
-    res.status(500).json({ message: error.message, data: false });
+    handleServerError(res, error);
   }
 };
 
-// Update customer by ID
 const updateCustomerById = async (req, res) => {
   try {
     const updatedCustomer = await Customer.findByIdAndUpdate(
@@ -63,40 +49,23 @@ const updateCustomerById = async (req, res) => {
       { new: true }
     );
     if (!updatedCustomer) {
-      return res.status(404).json({
-        message: "Customer not found.",
-        data: null,
-        status: false,
-      });
+      return handleNotFound(res);
     }
-    res.status(200).json({
-      message: "Customer updated successfully.",
-      data: updatedCustomer,
-      status: true,
-    });
+    handleSuccess(res, "Customer updated successfully.", updatedCustomer);
   } catch (error) {
-    res.status(500).json({ message: error.message, data: false });
+    handleServerError(res, error);
   }
 };
 
-// Delete customer by ID
 const deleteCustomerById = async (req, res) => {
   try {
     const deletedCustomer = await Customer.findByIdAndDelete(req.params.id);
     if (!deletedCustomer) {
-      return res.status(404).json({
-        message: "Customer not found.",
-        data: null,
-        status: false,
-      });
+      return handleNotFound(res);
     }
-    res.status(200).json({
-      message: "Customer deleted successfully.",
-      data: deletedCustomer,
-      status: true,
-    });
+    handleSuccess(res, "Customer deleted successfully.", deletedCustomer);
   } catch (error) {
-    res.status(500).json({ message: error.message, data: false });
+    handleServerError(res, error);
   }
 };
 

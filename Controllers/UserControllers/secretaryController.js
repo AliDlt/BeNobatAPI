@@ -1,60 +1,46 @@
 const Secretary = require("../../Models/secretaryModel");
+const {
+  handleBadRequest,
+  handleNotFound,
+  handleServerError,
+  handleSuccess,
+} = require("../../Utils/handlers");
 
-// Create a new secretary
 const createSecretary = async (req, res) => {
   try {
     const newSecretary = await Secretary.create(req.body);
-    res.status(201).json({
-      message: "Secretary created successfully.",
-      data: newSecretary,
-      status: true,
-    });
+    handleSuccess(res, "Secretary created successfully.", newSecretary);
   } catch (error) {
-    res.status(500).json({ message: error.message, data: false });
+    handleServerError(res, error);
   }
 };
 
-// Get all Secretaries with pagination
 const getAllSecretaries = async (req, res) => {
   try {
     const { page, limit } = req.query;
 
     const secretaries = await Secretary.find()
-      .skip((page - 1) * count)
+      .skip((page - 1) * limit)
       .limit(Number(limit));
 
-    res.status(200).json({
-      message: "Secretarys retrieved successfully.",
-      data: secretaries,
-      status: true,
-    });
+    handleSuccess(res, "Secretaries retrieved successfully.", secretaries);
   } catch (error) {
-    res.status(500).json({ message: error.message, data: false });
+    handleServerError(res, error);
   }
 };
 
-// Get secretary by ID
 const getSecretaryById = async (req, res) => {
   try {
     const secretary = await Secretary.findById(req.params.id);
     if (!secretary) {
-      return res.status(404).json({
-        message: "Secretary not found.",
-        data: null,
-        status: false,
-      });
+      return handleNotFound(res);
     }
-    res.status(200).json({
-      message: "Secretary retrieved successfully.",
-      data: secretary,
-      status: true,
-    });
+    handleSuccess(res, "Secretary retrieved successfully.", secretary);
   } catch (error) {
-    res.status(500).json({ message: error.message, data: false });
+    handleServerError(res, error);
   }
 };
 
-// Update secretary by ID
 const updateSecretaryById = async (req, res) => {
   try {
     const updatedSecretary = await Secretary.findByIdAndUpdate(
@@ -63,40 +49,23 @@ const updateSecretaryById = async (req, res) => {
       { new: true }
     );
     if (!updatedSecretary) {
-      return res.status(404).json({
-        message: "Secretary not found.",
-        data: null,
-        status: false,
-      });
+      return handleNotFound(res);
     }
-    res.status(200).json({
-      message: "Secretary updated successfully.",
-      data: updatedSecretary,
-      status: true,
-    });
+    handleSuccess(res, "Secretary updated successfully.", updatedSecretary);
   } catch (error) {
-    res.status(500).json({ message: error.message, data: false });
+    handleServerError(res, error);
   }
 };
 
-// Delete secretary by ID
 const deleteSecretaryById = async (req, res) => {
   try {
     const deletedSecretary = await Secretary.findByIdAndDelete(req.params.id);
     if (!deletedSecretary) {
-      return res.status(404).json({
-        message: "Secretary not found.",
-        data: null,
-        status: false,
-      });
+      return handleNotFound(res);
     }
-    res.status(200).json({
-      message: "Secretary deleted successfully.",
-      data: deletedSecretary,
-      status: true,
-    });
+    handleSuccess(res, "Secretary deleted successfully.", deletedSecretary);
   } catch (error) {
-    res.status(500).json({ message: error.message, data: false });
+    handleServerError(res, error);
   }
 };
 

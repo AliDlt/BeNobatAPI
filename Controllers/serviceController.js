@@ -1,76 +1,68 @@
 const Service = require("../Models/serviceModel");
 const Expert = require("../Models/expertModel");
+const {
+  handleNotFound,
+  handleSuccess,
+  handleServerError,
+} = require("../utils/handlers");
 
 // Create a new service
 const createService = async (req, res) => {
   try {
     const newService = await Service.create(req.body);
-    res.status(201).json({
-      message: "Service created successfully.",
-      data: newService,
-      status: true,
-    });
+    handleSuccess(res, "Service created successfully.", newService);
   } catch (error) {
-    res.status(500).json({ message: error.message, data: false });
+    handleServerError(res, error);
   }
 };
 
 // Get all services
 const getAllServices = async (req, res) => {
   try {
-    const { page, limit } = req.query;
+    const { page = 1, limit = 10 } = req.query;
 
     const services = await Service.find()
-      .skip((page - 1) * count)
+      .skip((page - 1) * limit)
       .limit(Number(limit));
 
-    res.status(200).json({
-      message: "Services retrieved successfully.",
-      data: services,
-      status: true,
-    });
+    handleSuccess(res, "Services retrieved successfully.", services);
   } catch (error) {
-    res.status(500).json({ message: error.message, data: false });
+    handleServerError(res, error);
   }
 };
 
 // Get all services by expert id
 const getAllServicesByExpertId = async (req, res) => {
   try {
-    const { page, limit } = req.query;
+    const { page = 1, limit = 10 } = req.query;
     const { id } = req.body;
 
-    const services = await Expert.find(id)
-      .skip((page - 1) * count)
+    const expert = await Expert.findById(id)
+      .skip((page - 1) * limit)
       .limit(Number(limit));
 
-    res.status(200).json({
-      message: "Services retrieved successfully.",
-      data: services,
-      status: true,
-    });
+    if (!expert) {
+      return handleNotFound(res, "Expert not found.");
+    }
+
+    const services = expert.services; // Assuming Expert model has a 'services' field
+
+    handleSuccess(res, "Services retrieved successfully.", services);
   } catch (error) {
-    res.status(500).json({ message: error.message, data: false });
+    handleServerError(res, error);
   }
 };
+
 // Get service by ID
 const getServiceById = async (req, res) => {
   try {
     const service = await Service.findById(req.params.id);
     if (!service) {
-      return res.status(404).json({
-        message: "Service not found.",
-        data: null,
-        status: false,
-      });
+      return handleNotFound(res, "Service not found.");
     }
-    res.status(200).json({
-      message: "Service retrieved successfully.",
-      data: service,
-      status: true,
-    });
+    handleSuccess(res, "Service retrieved successfully.", service);
   } catch (error) {
-    res.status(500).json({ message: error.message, data: false });
+    handleServerError(res, error);
   }
 };
 
@@ -83,19 +75,11 @@ const updateServiceById = async (req, res) => {
       { new: true }
     );
     if (!updatedService) {
-      return res.status(404).json({
-        message: "Service not found.",
-        data: null,
-        status: false,
-      });
+      return handleNotFound(res, "Service not found.");
     }
-    res.status(200).json({
-      message: "Service updated successfully.",
-      data: updatedService,
-      status: true,
-    });
+    handleSuccess(res, "Service updated successfully.", updatedService);
   } catch (error) {
-    res.status(500).json({ message: error.message, data: false });
+    handleServerError(res, error);
   }
 };
 
@@ -104,19 +88,11 @@ const deleteServiceById = async (req, res) => {
   try {
     const deletedService = await Service.findByIdAndDelete(req.params.id);
     if (!deletedService) {
-      return res.status(404).json({
-        message: "Service not found.",
-        data: null,
-        status: false,
-      });
+      return handleNotFound(res, "Service not found.");
     }
-    res.status(200).json({
-      message: "Service deleted successfully.",
-      data: deletedService,
-      status: true,
-    });
+    handleSuccess(res, "Service deleted successfully.", deletedService);
   } catch (error) {
-    res.status(500).json({ message: error.message, data: false });
+    handleServerError(res, error);
   }
 };
 

@@ -1,35 +1,33 @@
 const Expertise = require("../Models/expertiseModel");
+const {
+  handleNotFound,
+  handleSuccess,
+  handleBadRequest,
+  handleServerError,
+} = require("../Utils/handlers");
 
 // Create a new expertise
 const createExpertise = async (req, res) => {
   try {
     const newExpertise = await Expertise.create(req.body);
-    res.status(201).json({
-      message: "Expertise created successfully.",
-      data: newExpertise,
-      status: true,
-    });
+    handleSuccess(res, "Expertise created successfully.", newExpertise);
   } catch (error) {
-    res.status(500).json({ message: error.message, data: false });
+    handleServerError(res, error);
   }
 };
 
 // Get all expertise
 const getAllExpertise = async (req, res) => {
   try {
-    const { page, limit } = req.query;
+    const { page = 1, limit = 10 } = req.query;
 
     const expertiseList = await Expertise.find()
-      .skip((page - 1) * count)
+      .skip((page - 1) * limit)
       .limit(Number(limit));
 
-    res.status(200).json({
-      message: "Expertise retrieved successfully.",
-      data: expertiseList,
-      status: true,
-    });
+    handleSuccess(res, "Expertise retrieved successfully.", expertiseList);
   } catch (error) {
-    res.status(500).json({ message: error.message, data: false });
+    handleServerError(res, error);
   }
 };
 
@@ -38,19 +36,11 @@ const getExpertiseById = async (req, res) => {
   try {
     const expertise = await Expertise.findById(req.params.id);
     if (!expertise) {
-      return res.status(404).json({
-        message: "Expertise not found.",
-        data: null,
-        status: false,
-      });
+      return handleNotFound(res, "Expertise not found.");
     }
-    res.status(200).json({
-      message: "Expertise retrieved successfully.",
-      data: expertise,
-      status: true,
-    });
+    handleSuccess(res, "Expertise retrieved successfully.", expertise);
   } catch (error) {
-    res.status(500).json({ message: error.message, data: false });
+    handleServerError(res, error);
   }
 };
 
@@ -63,19 +53,11 @@ const updateExpertiseById = async (req, res) => {
       { new: true }
     );
     if (!updatedExpertise) {
-      return res.status(404).json({
-        message: "Expertise not found.",
-        data: null,
-        status: false,
-      });
+      return handleNotFound(res, "Expertise not found.");
     }
-    res.status(200).json({
-      message: "Expertise updated successfully.",
-      data: updatedExpertise,
-      status: true,
-    });
+    handleSuccess(res, "Expertise updated successfully.", updatedExpertise);
   } catch (error) {
-    res.status(500).json({ message: error.message, data: false });
+    handleServerError(res, error);
   }
 };
 
@@ -84,19 +66,11 @@ const deleteExpertiseById = async (req, res) => {
   try {
     const deletedExpertise = await Expertise.findByIdAndDelete(req.params.id);
     if (!deletedExpertise) {
-      return res.status(404).json({
-        message: "Expertise not found.",
-        data: null,
-        status: false,
-      });
+      return handleNotFound(res, "Expertise not found.");
     }
-    res.status(200).json({
-      message: "Expertise deleted successfully.",
-      data: deletedExpertise,
-      status: true,
-    });
+    handleSuccess(res, "Expertise deleted successfully.", deletedExpertise);
   } catch (error) {
-    res.status(500).json({ message: error.message, data: false });
+    handleServerError(res, error);
   }
 };
 

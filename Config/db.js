@@ -1,36 +1,28 @@
 const mongoose = require("mongoose");
 const Business = require("../Models/businessModel");
 const Admin = require("../Models/adminModel");
-
 const { hashPassword } = require("../Utils/hashPassword");
 
 const connectDB = async () => {
   try {
     const conn = await mongoose.connect(process.env.MONGO_URI);
-
-    // Create a default
     await createDefaultBusiness();
     await createDefaultAdmin();
 
     console.log(`MongoDB Connected: ${conn.connection.host}`);
-  } catch (err) {
-    console.error("Error creating default Business document:", err);
+  } catch (error) {
+    console.error("Error connecting to MongoDB:", error);
     process.exit(1);
   }
 };
 
-// Function to create a default Business document
 const createDefaultBusiness = async () => {
   try {
-    // Check if a default Business document already exists
-    const existingBusiness = await Business.findOne({
-      businessName: "نام مرکز شما",
-    });
+    const businessName = "نام مرکز شما";
+    const existingBusiness = await Business.findOne({ businessName });
 
-    // If not, create a default Business document
     if (!existingBusiness) {
-      await Business.create({});
-
+      await Business.create({ businessName });
       console.log("Default Business Document Created");
     }
   } catch (error) {
@@ -40,19 +32,12 @@ const createDefaultBusiness = async () => {
 
 const createDefaultAdmin = async () => {
   try {
-    // Check if a default Admin document already exists
-    const existingAdmin = await Admin.findOne({ username: "admin" });
+    const username = "admin";
+    const existingAdmin = await Admin.findOne({ username });
 
-    // If not, create a default Business document
     if (!existingAdmin) {
       const hashedPassword = await hashPassword("1234_admin");
-
-      await Admin.create({
-        username: "admin",
-        active: true,
-        password: hashedPassword,
-      });
-
+      await Admin.create({ username, active: true, password: hashedPassword });
       console.log("Default Admin Document Created");
     }
   } catch (error) {

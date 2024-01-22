@@ -1,87 +1,63 @@
 const Appointment = require("../Models/appointmentModel");
 
-// Create a new appointment
+const {
+  handleBadRequest,
+  handleNotFound,
+  handleServerError,
+  handleSuccess,
+} = require("../Utils/handlers");
+
 const createAppointment = async (req, res) => {
   try {
     const newAppointment = await Appointment.create(req.body);
-    res.status(201).json({
-      message: "Appointment created successfully.",
-      data: newAppointment,
-      status: true,
-    });
+    handleSuccess(res,"Appointment created successfully.", newAppointment);
   } catch (error) {
-    res.status(500).json({ message: error.message, data: false });
+    handleServerError(res, error);
   }
 };
 
-// Get all appointments
 const getAllAppointments = async (req, res) => {
   try {
-    const { page, limit } = req.query;
-
+    const { page = 1, limit = 10 } = req.query;
     const appointments = await Appointment.find()
-      .skip((page - 1) * count)
+      .skip((page - 1) * limit)
       .limit(Number(limit));
-
-    res.status(200).json({
-      message: "Appointments retrieved successfully.",
-      data: appointments,
-      status: true,
-    });
+    handleSuccess(res, "Appointments retrieved successfully.", appointments);
   } catch (error) {
-    res.status(500).json({ message: error.message, data: false });
+    handleServerError(res, error);
   }
 };
 
-// Get all appointments by expert Id
 const getAllAppointmentsByExpertId = async (req, res) => {
   try {
-    const { expertId, page, limit } = req.query;
+    const { expertId, page = 1, limit = 10 } = req.query;
 
     if (!expertId) {
-      return res.status(400).json({
-        message: "Expert ID is required.",
-        data: null,
-        status: false,
-      });
+      return handleBadRequest(res, "Expert ID is required.");
     }
 
     const appointments = await Appointment.find({ expert: expertId })
       .skip((page - 1) * limit)
       .limit(Number(limit));
 
-    res.status(200).json({
-      message: "Appointments retrieved successfully.",
-      data: appointments,
-      status: true,
-    });
+    handleSuccess(res, "Appointments retrieved successfully.", appointments);
   } catch (error) {
-    res.status(500).json({ message: error.message, data: false });
+    handleServerError(res, error);
   }
 };
 
-// Get appointment by ID
 const getAppointmentById = async (req, res) => {
   try {
     const appointment = await Appointment.findById(req.params.id);
     if (!appointment) {
-      return res.status(404).json({
-        message: "Appointment not found.",
-        data: null,
-        status: false,
-      });
+      return handleNotFound(res);
     }
-    res.status(200).json({
-      message: "Appointment retrieved successfully.",
-      data: appointment,
-      status: true,
-    });
+    handleSuccess(res, "Appointment retrieved successfully.", appointment);
   } catch (error) {
-    res.status(500).json({ message: error.message, data: false });
+    handleServerError(res, error);
   }
 };
 
-// Update appointment by ID
 const updateAppointmentById = async (req, res) => {
   try {
     const updatedAppointment = await Appointment.findByIdAndUpdate(
@@ -90,42 +66,25 @@ const updateAppointmentById = async (req, res) => {
       { new: true }
     );
     if (!updatedAppointment) {
-      return res.status(404).json({
-        message: "Appointment not found.",
-        data: null,
-        status: false,
-      });
+      return handleNotFound(res);
     }
-    res.status(200).json({
-      message: "Appointment updated successfully.",
-      data: updatedAppointment,
-      status: true,
-    });
+    handleSuccess(res, "Appointment updated successfully.", updatedAppointment);
   } catch (error) {
-    res.status(500).json({ message: error.message, data: false });
+    handleServerError(res, error);
   }
 };
 
-// Delete appointment by ID
 const deleteAppointmentById = async (req, res) => {
   try {
     const deletedAppointment = await Appointment.findByIdAndDelete(
       req.params.id
     );
     if (!deletedAppointment) {
-      return res.status(404).json({
-        message: "Appointment not found.",
-        data: null,
-        status: false,
-      });
+      return handleNotFound(res);
     }
-    res.status(200).json({
-      message: "Appointment deleted successfully.",
-      data: deletedAppointment,
-      status: true,
-    });
+    handleSuccess(res, "Appointment deleted successfully.", deletedAppointment);
   } catch (error) {
-    res.status(500).json({ message: error.message, data: false });
+    handleServerError(res, error);
   }
 };
 

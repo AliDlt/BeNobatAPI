@@ -1,35 +1,41 @@
 const PaymentInformation = require("../models/paymentInformationModel");
+const {
+  handleNotFound,
+  handleSuccess,
+  handleBadRequest,
+  handleServerError,
+} = require("../utils/handlers");
 
 // Create a new payment information
 const createPaymentInformation = async (req, res) => {
   try {
     const newPaymentInfo = await PaymentInformation.create(req.body);
-    res.status(201).json({
-      message: "Payment information created successfully.",
-      data: newPaymentInfo,
-      status: true,
-    });
+    handleSuccess(
+      res,
+      "Payment information created successfully.",
+      newPaymentInfo
+    );
   } catch (error) {
-    res.status(500).json({ message: error.message, data: false });
+    handleServerError(res, error);
   }
 };
 
 // Get all payment information
 const getAllPaymentInformation = async (req, res) => {
   try {
-    const { page, limit } = req.query;
+    const { page = 1, limit = 10 } = req.query;
 
     const paymentInfoList = await PaymentInformation.find()
-      .skip((page - 1) * count)
+      .skip((page - 1) * limit)
       .limit(Number(limit));
 
-    res.status(200).json({
-      message: "Payment information retrieved successfully.",
-      data: paymentInfoList,
-      status: true,
-    });
+    handleSuccess(
+      res,
+      "Payment information retrieved successfully.",
+      paymentInfoList
+    );
   } catch (error) {
-    res.status(500).json({ message: error.message, data: false });
+    handleServerError(res, error);
   }
 };
 
@@ -38,19 +44,15 @@ const getPaymentInformationById = async (req, res) => {
   try {
     const paymentInfo = await PaymentInformation.findById(req.params.id);
     if (!paymentInfo) {
-      return res.status(404).json({
-        message: "Payment information not found.",
-        data: null,
-        status: false,
-      });
+      return handleNotFound(res, "Payment information not found.");
     }
-    res.status(200).json({
-      message: "Payment information retrieved successfully.",
-      data: paymentInfo,
-      status: true,
-    });
+    handleSuccess(
+      res,
+      "Payment information retrieved successfully.",
+      paymentInfo
+    );
   } catch (error) {
-    res.status(500).json({ message: error.message, data: false });
+    handleServerError(res, error);
   }
 };
 
@@ -63,19 +65,15 @@ const updatePaymentInformationById = async (req, res) => {
       { new: true }
     );
     if (!updatedPaymentInfo) {
-      return res.status(404).json({
-        message: "Payment information not found.",
-        data: null,
-        status: false,
-      });
+      return handleNotFound(res, "Payment information not found.");
     }
-    res.status(200).json({
-      message: "Payment information updated successfully.",
-      data: updatedPaymentInfo,
-      status: true,
-    });
+    handleSuccess(
+      res,
+      "Payment information updated successfully.",
+      updatedPaymentInfo
+    );
   } catch (error) {
-    res.status(500).json({ message: error.message, data: false });
+    handleServerError(res, error);
   }
 };
 
@@ -86,19 +84,15 @@ const deletePaymentInformationById = async (req, res) => {
       req.params.id
     );
     if (!deletedPaymentInfo) {
-      return res.status(404).json({
-        message: "Payment information not found.",
-        data: null,
-        status: false,
-      });
+      return handleNotFound(res, "Payment information not found.");
     }
-    res.status(200).json({
-      message: "Payment information deleted successfully.",
-      data: deletedPaymentInfo,
-      status: true,
-    });
+    handleSuccess(
+      res,
+      "Payment information deleted successfully.",
+      deletedPaymentInfo
+    );
   } catch (error) {
-    res.status(500).json({ message: error.message, data: false });
+    handleServerError(res, error);
   }
 };
 

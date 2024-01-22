@@ -1,5 +1,8 @@
+const express = require("express");
 const multer = require("multer");
 const path = require("path");
+
+const router = express.Router();
 
 // Set up storage for Multer
 const storage = multer.diskStorage({
@@ -15,8 +18,13 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
+// Error handling middleware
+const handleUploadError = (res, error) => {
+  res.status(500).json({ message: error.message, data: null, status: false });
+};
+
 // Upload an image
-router.post("/upload", upload.single("image"), (req, res) => {
+router.post("/upload", upload.single("image"), async (req, res) => {
   try {
     const file = req.file;
     if (!file) {
@@ -27,7 +35,7 @@ router.post("/upload", upload.single("image"), (req, res) => {
       });
     }
 
-    const imageUrl = `${process.env.URL}:${process.env.PORT}/public/uploads/${file.filename}`; // Replace with your server URL
+    const imageUrl = `${process.env.URL}:${process.env.PORT}/public/uploads/${file.filename}`;
 
     res.status(201).json({
       message: "Image uploaded successfully.",
@@ -35,19 +43,19 @@ router.post("/upload", upload.single("image"), (req, res) => {
       status: true,
     });
   } catch (error) {
-    res.status(500).json({ message: error.message, data: null, status: false });
+    handleUploadError(res, error);
   }
 });
 
 // Retrieve an image
-router.get("/image/:filename", (req, res) => {
+router.get("/image/:filename", async (req, res) => {
   try {
     const filename = req.params.filename;
-    const imagePath = path.join(__dirname, "../uploads", filename);
+    const imagePath = path.join(__dirname, "../public/uploads", filename);
 
     res.sendFile(imagePath);
   } catch (error) {
-    res.status(500).json({ message: error.message, data: null, status: false });
+    handleUploadError(res, error);
   }
 });
 
