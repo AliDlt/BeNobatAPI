@@ -1,10 +1,10 @@
-const PaymentInformation = require("../models/paymentInformationModel");
+const PaymentInformation = require("../Models/paymentInfoModel");
 const {
   handleNotFound,
   handleSuccess,
   handleBadRequest,
   handleServerError,
-} = require("../utils/handlers");
+} = require("../Utils/handlers");
 
 // Create a new payment information
 const createPaymentInformation = async (req, res) => {

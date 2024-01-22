@@ -4,7 +4,7 @@ const {
   handleNotFound,
   handleSuccess,
   handleServerError,
-} = require("../utils/handlers");
+} = require("../Utils/handlers");
 
 // Create a new service
 const createService = async (req, res) => {

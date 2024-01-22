@@ -10,7 +10,7 @@ const {
 const createAppointment = async (req, res) => {
   try {
     const newAppointment = await Appointment.create(req.body);
-    handleSuccess(res,"Appointment created successfully.", newAppointment);
+    handleSuccess(res, "Appointment created successfully.", newAppointment);
   } catch (error) {
     handleServerError(res, error);
   }
