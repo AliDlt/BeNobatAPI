@@ -20,7 +20,6 @@ const businessSchema = new mongoose.Schema({
     fileAddress: { type: String, default: "doc.png" },
     altText: { type: String, default: "Default Header Image" },
   },
-  bannerImages: { type: [String], default: ["banner1.webp"] },
   about: {
     text: { type: String, default: "درباره ما" },
     image: { type: String, default: "about.jpg" },
@@ -35,11 +34,6 @@ const businessSchema = new mongoose.Schema({
       default: "https://maps.app.goo.gl/MrRj36G63HwULUNu7",
     },
     location: { type: String, default: "تهران، ستارخان" },
-  },
-  feature: {
-    primary: { type: String, default: "1" },
-    secondary: { type: String, default: "1" },
-    Tertiary: { type: String, default: "3" },
   },
   hoursOfWork: { type: String, default: "2 تا 6" },
 });
