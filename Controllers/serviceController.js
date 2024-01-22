@@ -1,4 +1,5 @@
 const Service = require("../Models/serviceModel");
+const Expert = require("../Models/expertModel");
 
 // Create a new service
 const createService = async (req, res) => {
@@ -33,6 +34,25 @@ const getAllServices = async (req, res) => {
   }
 };
 
+// Get all services by expert id
+const getAllServicesByExpertId = async (req, res) => {
+  try {
+    const { page, limit } = req.query;
+    const { id } = req.body;
+
+    const services = await Expert.find(id)
+      .skip((page - 1) * count)
+      .limit(Number(limit));
+
+    res.status(200).json({
+      message: "Services retrieved successfully.",
+      data: services,
+      status: true,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message, data: false });
+  }
+};
 // Get service by ID
 const getServiceById = async (req, res) => {
   try {
@@ -103,6 +123,7 @@ const deleteServiceById = async (req, res) => {
 module.exports = {
   createService,
   getAllServices,
+  getAllServicesByExpertId,
   getServiceById,
   updateServiceById,
   deleteServiceById,

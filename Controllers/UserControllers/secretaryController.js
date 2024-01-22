@@ -14,18 +14,18 @@ const createSecretary = async (req, res) => {
   }
 };
 
-// Get all secretarys with pagination
-const getAllSecretarys = async (req, res) => {
+// Get all Secretaries with pagination
+const getAllSecretaries = async (req, res) => {
   try {
     const { page, limit } = req.query;
 
-    const secretarys = await Secretary.find()
+    const secretaries = await Secretary.find()
       .skip((page - 1) * count)
       .limit(Number(limit));
 
     res.status(200).json({
       message: "Secretarys retrieved successfully.",
-      data: secretarys,
+      data: secretaries,
       status: true,
     });
   } catch (error) {
@@ -102,7 +102,7 @@ const deleteSecretaryById = async (req, res) => {
 
 module.exports = {
   createSecretary,
-  getAllSecretarys,
+  getAllSecretaries,
   getSecretaryById,
   updateSecretaryById,
   deleteSecretaryById,

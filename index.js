@@ -39,6 +39,15 @@ app.get("/", function (req, res) {
 app.use(require("./Routes/businessRoute"));
 app.use(require("./Routes/authRoute"));
 app.use(require("./Routes/smsRoute"));
+app.use(require("./Routes/appointmentRoute"));
+app.use(require("./Routes/expertiseRoute"));
+app.use(require("./Routes/paymentInfoRoute"));
+app.use(require("./Routes/serviceRoute"));
+
+app.use(require("./Routes/UserRoutes/adminRoute"));
+app.use(require("./Routes/UserRoutes/customerRoute"));
+app.use(require("./Routes/UserRoutes/expertRoute"));
+app.use(require("./Routes/UserRoutes/secretaryRoute"));
 
 // Handle 404
 app.get("*", function (req, res) {

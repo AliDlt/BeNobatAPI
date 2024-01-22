@@ -33,6 +33,33 @@ const getAllAppointments = async (req, res) => {
   }
 };
 
+// Get all appointments by expert Id
+const getAllAppointmentsByExpertId = async (req, res) => {
+  try {
+    const { expertId, page, limit } = req.query;
+
+    if (!expertId) {
+      return res.status(400).json({
+        message: "Expert ID is required.",
+        data: null,
+        status: false,
+      });
+    }
+
+    const appointments = await Appointment.find({ expert: expertId })
+      .skip((page - 1) * limit)
+      .limit(Number(limit));
+
+    res.status(200).json({
+      message: "Appointments retrieved successfully.",
+      data: appointments,
+      status: true,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message, data: false });
+  }
+};
+
 // Get appointment by ID
 const getAppointmentById = async (req, res) => {
   try {
@@ -105,6 +132,7 @@ const deleteAppointmentById = async (req, res) => {
 module.exports = {
   createAppointment,
   getAllAppointments,
+  getAllAppointmentsByExpertId,
   getAppointmentById,
   updateAppointmentById,
   deleteAppointmentById,

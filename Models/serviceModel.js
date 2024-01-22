@@ -6,6 +6,9 @@ const serviceSchema = new mongoose.Schema({
   cost: { type: Number, required: true },
   expert: { type: mongoose.Schema.Types.ObjectId, ref: "Expert" },
   dateTime: [{ type: Date }],
+  paymentMethod: {
+    type: String,
+  },
 });
 
 const Service = mongoose.model("Service", serviceSchema);

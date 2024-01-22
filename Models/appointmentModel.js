@@ -13,6 +13,8 @@ const appointmentSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "PaymentInformation",
   },
+  note: { type: String },
+  imageNames: [String],
 });
 
 const Appointment = mongoose.model("Appointment", appointmentSchema);
