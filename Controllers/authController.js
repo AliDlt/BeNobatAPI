@@ -1,17 +1,13 @@
 const User = require("../Models/userBaseModel");
 
 const { hashPassword, comparePassword } = require("../Utils/hashPassword");
-const { generateToken, verifyToken } = require("../Utils/jwt");
-
-// const {
-//   sendConfirmationEmail,
-//   sendResetPassEmail,
-// } = require("../utils/nodemailer");
+const { generateToken } = require("../Utils/jwt");
+const { isPasswordValid } = require("../Utils/validation");
 
 const registerUser = async (req, res) => {
   try {
-    const { username, email, password } = req.body;
-    const user = await User.findOne({ email });
+    const { phoneNumber, password, role } = req.body;
+    const user = await User.findOne({ phoneNumber });
 
     if (user) {
       return res.status(400).json({
@@ -23,33 +19,15 @@ const registerUser = async (req, res) => {
       const hashedPassword = await hashPassword(password);
       const newUser = await User.create({
         username,
-        email,
+        phoneNumber,
         password: hashedPassword,
+        role,
       });
       return res.status(201).json({
         message: "User registered successfully.",
         data: newUser,
         status: true,
       });
-      // const confirmationToken = generateToken({ user: newUser }, "1d");
-
-      // const sendEmail = await sendConfirmationEmail(
-      //   fullname,
-      //   email,
-      //   confirmationToken
-
-      // if (sendEmail.status) {
-      //   return res.status(201).json({
-      //     message:
-      //       "User registered successfully. Please activate your account",
-      //     data: true,
-      //   });
-      // } else {
-      //   return res.status(500).json({
-      //     message: "error in sending email",
-      //     data: false,
-      //   });
-      // }
     }
   } catch (error) {
     res.status(500).json({ message: error, data: false });
@@ -58,8 +36,8 @@ const registerUser = async (req, res) => {
 
 const loginUser = async (req, res) => {
   try {
-    const { username, password } = req.body;
-    const user = await User.findOne({ username });
+    const { phoneNumber, password } = req.body;
+    const user = await User.findOne({ phoneNumber });
     if (!user) {
       return res
         .status(404)
@@ -83,130 +61,44 @@ const loginUser = async (req, res) => {
   }
 };
 
-// const sendResetPassword = async (req, res) => {
-//   try {
-//     const email = req.body.email;
-//     const user = await User.findOne({ email: email });
+const changePassword = async (req, res) => {
+  try {
+    const { phoneNumber, password } = req.body;
 
-//     if (!user) {
-//       return res.status(404).json({ message: "User not found", data: false });
-//     }
+    const user = await User.findOne({ phoneNumber });
 
-//     const resetPassToken = generateToken({ user: user }, "1d");
+    if (!user) {
+      return res.status(404).json({ message: "User not found", data: false });
+    }
 
-//     const sendEmail = await sendResetPassEmail(
-//       user.fullname,
-//       user.email,
-//       resetPassToken
-//     );
+    if (isPasswordValid(password)) {
+      const hashedPassword = await hashPassword(password);
+      const passwordResetVersion = user.passwordResetVersion || 0;
 
-//     if (sendEmail.status) {
-//       return res.status(201).json({
-//         message: "Reset password link sent successfully",
-//         data: true,
-//       });
-//     } else {
-//       return res.status(500).json({
-//         message: "Error in sending email",
-//         data: false,
-//       });
-//     }
-//   } catch (error) {
-//     res.status(500).json({ message: error.message, data: false });
-//   }
-// };
-
-// const getResetPassword = async (req, res) => {
-//   try {
-//     const token = req.params.token;
-//     const decodedToken = await verifyToken(token);
-
-//     if (!decodedToken || !decodedToken.userId) {
-//       return res
-//         .status(400)
-//         .json({ message: "Invalid or expired token", data: false });
-//     }
-
-//     const userId = decodedToken.userId;
-//     const user = await User.findOne({ _id: userId });
-
-//     if (!user) {
-//       return res.status(404).json({ message: "User not found", data: false });
-//     }
-
-//     return res.status(200).json({ message: "Token is correct", data: true });
-//   } catch (verificationError) {
-//     if (verificationError.name === "JsonWebTokenError") {
-//       return res
-//         .status(400)
-//         .json({ message: "Invalid token format", data: false });
-//     } else {
-//       return res.status(500).json({ message: error.message, data: false });
-//     }
-//   }
-// };
-
-// const changePassword = async (req, res) => {
-//   try {
-//     const email = req.body.email;
-//     const password = req.body.newPassword;
-
-//     const user = await User.findOne({ email });
-
-//     if (!user) {
-//       return res.status(404).json({ message: "User not found", data: false });
-//     }
-
-//     if (isPasswordValid(password)) {
-//       const hashedPassword = await hashPassword(password);
-//       const passwordResetVersion = user.passwordResetVersion || 0;
-
-//       const update = await user.updateOne({
-//         password: hashedPassword,
-//         passwordResetVersion: passwordResetVersion + 1,
-//       });
-//       if (update) {
-//         return res
-//           .status(200)
-//           .json({ message: "Password changed", data: true });
-//       } else {
-//         return res
-//           .status(400)
-//           .json({ message: "change password got an error", data: false });
-//       }
-//     } else {
-//       return res.status(400).json({
-//         message:
-//           "Please fill a valid password. It should be at least 8 characters long and not contain white spaces.",
-//         data: false,
-//       });
-//     }
-//   } catch (error) {
-//     res.status(500).json({ message: error.message, data: false });
-//   }
-// };
-
-// const confirmEmail = async (req, res) => {
-//   try {
-//     const token = req.params.token;
-//     const decodedToken = await verifyToken(token);
-
-//     if (!decodedToken || !decodedToken.userId) {
-//       return res
-//         .status(400)
-//         .json({ message: "Invalid or expired token", data: false });
-//     }
-
-//     const userId = decodedToken.userId;
-//     await User.findByIdAndUpdate(userId, { isConfirmed: true });
-
-//     return res
-//       .status(200)
-//       .json({ message: "Account successfully confirmed", data: true });
-//   } catch (error) {
-//     return res.status(500).json({ message: error.message, data: false });
-//   }
-// };
+      const update = await user.updateOne({
+        password: hashedPassword,
+        passwordResetVersion: passwordResetVersion + 1,
+      });
+      if (update) {
+        return res
+          .status(200)
+          .json({ message: "Password changed", data: true });
+      } else {
+        return res
+          .status(400)
+          .json({ message: "change password got an error", data: false });
+      }
+    } else {
+      return res.status(400).json({
+        message:
+          "Please fill a valid password. It should be at least 8 characters long and not contain white spaces.",
+        data: false,
+      });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message, data: false });
+  }
+};
 
 // const changeUser = async (req, res) => {
 //   try {
@@ -240,9 +132,6 @@ const loginUser = async (req, res) => {
 module.exports = {
   registerUser,
   loginUser,
-  //   sendResetPassword,
-  //   getResetPassword,
-  //   confirmEmail,
   //   changeUser,
-  //   changePassword,
+  changePassword,
 };

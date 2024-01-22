@@ -26,18 +26,19 @@ app.use(bodyParser.json());
 
 app.use("/public", express.static("public"));
 
+//Handle Default
+app.get("/", function (req, res) {
+  res.status(200).json("Welcome to BeNobat Api");
+});
+
 // routes
 app.use(require("./Routes/businessRoute"));
 app.use(require("./Routes/authRoute"));
+app.use(require("./Routes/smsRoute"));
 
 // Handle 404
 app.get("*", function (req, res) {
   res.status(404).json("Route Not found");
-});
-
-//Handle Default
-app.get("/", function (req, res) {
-  res.status(200).json("Welcome to BeNobat Api");
 });
 
 app.listen(port, () => {
