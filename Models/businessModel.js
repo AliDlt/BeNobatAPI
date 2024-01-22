@@ -1,5 +1,13 @@
 const mongoose = require("mongoose");
 
+const socialLinksDefault = [
+  {
+    icon: "instagram.png",
+    link: "https://instagram.com/",
+    id: "meta",
+  },
+];
+
 const businessSchema = new mongoose.Schema({
   businessName: { type: String, default: "نام مرکز شما" },
   colorPalette: {
@@ -9,8 +17,14 @@ const businessSchema = new mongoose.Schema({
   },
   slogan: { type: String, default: "شعار شما" },
   socialLinks: {
-    type: [String],
-    default: ["https://instagram.com/", "https://twitter.com/"],
+    type: [
+      {
+        icon: { type: String, default: "instagram.png" },
+        link: { type: String, default: "https://instagram.com/" },
+        id: { type: String, default: "meta" },
+      },
+    ],
+    default: socialLinksDefault,
   },
   logo: {
     fileAddress: { type: String, default: "logo.webp" },

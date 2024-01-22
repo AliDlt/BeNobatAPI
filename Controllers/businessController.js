@@ -26,13 +26,14 @@ exports.getBusiness = async (req, res) => {
       ...business.toObject(),
       logo: generateImageLink(business.logo.fileAddress),
       headerImage: generateImageLink(business.headerImage.fileAddress),
-      bannerImages: business.bannerImages.map((banner) =>
-        generateImageLink(banner)
-      ),
       about: {
         ...business.about.toObject(),
         image: generateImageLink(business.about.image),
       },
+      socialLinks: business.socialLinks.map((link) => ({
+        ...link.toObject(),
+        icon: generateImageLink(link.icon),
+      })),
     };
 
     handleSuccess(
