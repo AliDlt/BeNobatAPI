@@ -6,7 +6,7 @@ const { isPasswordValid } = require("../Utils/validation");
 
 const registerUser = async (req, res) => {
   try {
-    const { phoneNumber, password, role } = req.body;
+    const { phoneNumber, password, nationalCode, role } = req.body;
     const user = await User.findOne({ phoneNumber });
 
     if (user) {
@@ -21,6 +21,7 @@ const registerUser = async (req, res) => {
         username,
         phoneNumber,
         password: hashedPassword,
+        nationalCode,
         role,
       });
       return res.status(201).json({

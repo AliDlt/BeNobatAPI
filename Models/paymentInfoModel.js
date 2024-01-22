@@ -12,6 +12,7 @@ const paymentInfoSchema = new mongoose.Schema({
   },
   user: { type: mongoose.Schema.Types.ObjectId, ref: "UserBase" },
   appointments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Appointment" }],
+  dateTime: { type: Date, default: Date.now },
 });
 
 const PaymentInformation = mongoose.model(

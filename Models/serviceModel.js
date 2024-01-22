@@ -4,7 +4,8 @@ const serviceSchema = new mongoose.Schema({
   serviceName: { type: String, required: true },
   description: String,
   cost: { type: Number, required: true },
-  specialist: { type: mongoose.Schema.Types.ObjectId, ref: "Expert" },
+  expert: { type: mongoose.Schema.Types.ObjectId, ref: "Expert" },
+  dateTime: [{ type: Date }],
 });
 
 const Service = mongoose.model("Service", serviceSchema);

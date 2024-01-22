@@ -1,13 +1,13 @@
 const mongoose = require("mongoose");
 
 const appointmentSchema = new mongoose.Schema({
-  dateTime: { type: Date, default: Date.now },
+  dateTime: { type: Date, required: true, default: Date.now },
   appointmentStatus: {
     type: String,
     enum: ["completed", "canceled", "notCompleted"],
     default: "notCompleted",
   },
-  specialist: { type: mongoose.Schema.Types.ObjectId, ref: "Expert" },
+  expert: { type: mongoose.Schema.Types.ObjectId, ref: "Expert" },
   user: { type: mongoose.Schema.Types.ObjectId, ref: "UserBase" },
   paymentInfo: {
     type: mongoose.Schema.Types.ObjectId,

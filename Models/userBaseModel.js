@@ -5,6 +5,7 @@ const userBaseSchema = new mongoose.Schema(
     username: { type: String, unique: true },
     phoneNumber: { type: String, unique: true },
     password: String,
+    nationalCode: String,
     passwordResetVersion: {
       type: Number,
       default: 0,
