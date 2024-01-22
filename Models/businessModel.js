@@ -3,9 +3,9 @@ const mongoose = require("mongoose");
 const businessSchema = new mongoose.Schema({
   businessName: { type: String, default: "نام مرکز شما" },
   colorPalette: {
-    primary: { type: String, default: "#2AA7FF" },
-    secondary: { type: String, default: "#4B73B8" },
-    Tertiary: { type: String, default: "#515151" },
+    primaryColor: { type: String, default: "#2AA7FF" },
+    secondaryColor: { type: String, default: "#4B73B8" },
+    tertiaryColor: { type: String, default: "#515151" },
   },
   slogan: { type: String, default: "شعار شما" },
   socialLinks: {
