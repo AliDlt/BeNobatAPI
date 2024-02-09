@@ -12,11 +12,11 @@ const port = process.env.PORT;
 // Enable CORS for all routes
 app.use(cors());
 
-app.use(
-  helmet({
-    crossOriginIsolated: false,
-  })
-);
+// app.use(
+//   helmet({
+//     crossOriginIsolated: false,
+//   })
+// );
 
 //* Database connection
 db.connectDB();
