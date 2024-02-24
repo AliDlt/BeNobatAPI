@@ -9,6 +9,7 @@ const serviceSchema = new mongoose.Schema({
   paymentMethod: {
     type: String,
   },
+  imageName: String,
 });
 
 const Service = mongoose.model("Service", serviceSchema);

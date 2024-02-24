@@ -15,6 +15,7 @@ const appointmentSchema = new mongoose.Schema({
   },
   note: { type: String },
   imageNames: [String],
+  serviceName: String,
 });
 
 const Appointment = mongoose.model("Appointment", appointmentSchema);

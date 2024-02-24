@@ -24,22 +24,25 @@ const handleUploadError = (res, error) => {
 };
 
 // Upload an image
-router.post("/upload", upload.single("image"), async (req, res) => {
+router.post("/upload", upload.array("image", 10), async (req, res) => {
   try {
-    const file = req.file;
-    if (!file) {
+    const files = req.files;
+    if (!files || files.length === 0) {
       return res.status(400).json({
-        message: "No file uploaded.",
+        message: "No files uploaded.",
         data: null,
         status: false,
       });
     }
-
-    const imageUrl = `${process.env.URL}:${process.env.PORT}/public/uploads/${file.filename}`;
+    
+    //${process.env.URL}:${process.env.PORT}/public/uploads/
+    const imageUrls = files.map((file) => {
+      return `${file.filename}`;
+    });
 
     res.status(201).json({
-      message: "Image uploaded successfully.",
-      data: { imageUrl },
+      message: "Images uploaded successfully.",
+      data: { imageUrls },
       status: true,
     });
   } catch (error) {

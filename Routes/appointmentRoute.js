@@ -12,6 +12,11 @@ router.post(
   "/getAllAppointmentsByExpertId",
   appointmentController.getAllAppointmentsByExpertId
 );
+router.post(
+  "/getAllAppointmentsByUserId",
+  appointmentController.getAllAppointmentsByUserId
+);
+//set date auto
 router.post("/getAppointmentById", appointmentController.getAppointmentById);
 router.post(
   "/updateAppointmentById",

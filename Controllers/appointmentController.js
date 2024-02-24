@@ -58,6 +58,24 @@ const getAppointmentById = async (req, res) => {
   }
 };
 
+const getAllAppointmentsByUserId = async (req, res) => {
+  try {
+    const { userId, page = 1, limit = 10 } = req.query;
+
+    if (!userId) {
+      return handleBadRequest(res, "User ID is required.");
+    }
+
+    const appointments = await Appointment.find({ user: userId })
+      .skip((page - 1) * limit)
+      .limit(Number(limit));
+
+    handleSuccess(res, "Appointments retrieved successfully.", appointments);
+  } catch (error) {
+    handleServerError(res, error);
+  }
+};
+
 const updateAppointmentById = async (req, res) => {
   try {
     const updatedAppointment = await Appointment.findByIdAndUpdate(
@@ -95,4 +113,5 @@ module.exports = {
   getAppointmentById,
   updateAppointmentById,
   deleteAppointmentById,
+  getAllAppointmentsByUserId,
 };
