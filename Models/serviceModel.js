@@ -5,7 +5,33 @@ const serviceSchema = new mongoose.Schema({
   description: String,
   cost: { type: Number, required: true },
   expert: { type: mongoose.Schema.Types.ObjectId, ref: "Expert" },
-  dateTime: [{ type: Date }],
+  timePeriod: {
+    recurring: [
+      {
+        dayOfWeek: {
+          type: String,
+          enum: [
+            "شنبه",
+            "یک شنبه",
+            "دو شنبه",
+            "سه شنبه",
+            "چهار شنبه",
+            "پنج شنبه",
+            "جمعه",
+          ],
+        },
+        startTime: { type: String, required: true },
+        endTime: { type: String, required: true },
+      },
+    ],
+    dates: [
+      {
+        date: { type: Date, required: true },
+        startTime: { type: String, required: true },
+        endTime: { type: String, required: true },
+      },
+    ],
+  },
   paymentMethod: {
     type: String,
   },
