@@ -19,7 +19,7 @@ exports.getBusiness = async (req, res) => {
     const business = await Business.findOne();
 
     if (!business) {
-      return handleNotFound(res, "Business not found");
+      return handleNotFound(res, "کسب و کار یافت نشد.");
     }
 
     const businessWithImageLinks = {
@@ -38,7 +38,7 @@ exports.getBusiness = async (req, res) => {
 
     handleSuccess(
       res,
-      "Business retrieved successfully.",
+      "کسب و کار با موفقیت دریافت شد.",
       businessWithImageLinks
     );
   } catch (error) {
@@ -50,9 +50,9 @@ exports.createBusiness = async (req, res) => {
   try {
     const newBusiness = new Business(req.body);
     await newBusiness.save();
-    handleSuccess(res, "Business created successfully.", newBusiness);
+    handleSuccess(res, "کسب و کار با موفقیت ساخته شد.", newBusiness);
   } catch (error) {
-    handleBadRequest(res, "Bad Request");
+    handleBadRequest(res, "ریکوئست بد");
   }
 };
 
@@ -60,8 +60,8 @@ exports.updateBusiness = async (req, res) => {
   try {
     const updatedBusiness = req.body;
     await Business.updateOne(updatedBusiness);
-    handleSuccess(res, "Business updated successfully.", updatedBusiness);
+    handleSuccess(res, "کسب و کار با موفقیت بروزرسانی شد.", updatedBusiness);
   } catch (error) {
-    handleBadRequest(res, "Bad Request");
+    handleBadRequest(res, "ریکوئست بد");
   }
 };

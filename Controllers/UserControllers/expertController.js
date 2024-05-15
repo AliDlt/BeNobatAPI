@@ -9,7 +9,7 @@ const {
 const createExpert = async (req, res) => {
   try {
     const newExpert = await Expert.create(req.body);
-    handleSuccess(res, "Expert created successfully.", newExpert);
+    handleSuccess(res, "متخصص با موفقیت ساخته شد.", newExpert);
   } catch (error) {
     handleServerError(res, error);
   }
@@ -23,7 +23,7 @@ const getAllExperts = async (req, res) => {
       .skip((page - 1) * limit)
       .limit(Number(limit));
 
-    handleSuccess(res, "Experts retrieved successfully.", experts);
+    handleSuccess(res, "متخصصین با موفقیت دریافت شدند.", experts);
   } catch (error) {
     handleServerError(res, error);
   }
@@ -35,7 +35,7 @@ const getExpertById = async (req, res) => {
     if (!expert) {
       return handleNotFound(res);
     }
-    handleSuccess(res, "Expert retrieved successfully.", expert);
+    handleSuccess(res, "متخصص با موفقیت دریافت شد.", expert);
   } catch (error) {
     handleServerError(res, error);
   }
@@ -51,7 +51,7 @@ const updateExpertById = async (req, res) => {
     if (!updatedExpert) {
       return handleNotFound(res);
     }
-    handleSuccess(res, "Expert updated successfully.", updatedExpert);
+    handleSuccess(res, "متخصص با موفقیت بروزرسانی شد.", updatedExpert);
   } catch (error) {
     handleServerError(res, error);
   }
@@ -63,7 +63,7 @@ const deleteExpertById = async (req, res) => {
     if (!deletedExpert) {
       return handleNotFound(res);
     }
-    handleSuccess(res, "Expert deleted successfully.", deletedExpert);
+    handleSuccess(res, "متخصص با موفقیت حذف شد.", deletedExpert);
   } catch (error) {
     handleServerError(res, error);
   }

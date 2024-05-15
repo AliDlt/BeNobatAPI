@@ -10,7 +10,7 @@ const {
 const createExpertise = async (req, res) => {
   try {
     const newExpertise = await Expertise.create(req.body);
-    handleSuccess(res, "Expertise created successfully.", newExpertise);
+    handleSuccess(res, "تخصص با موفقیت ساخته شده.", newExpertise);
   } catch (error) {
     handleServerError(res, error);
   }
@@ -25,7 +25,7 @@ const getAllExpertise = async (req, res) => {
       .skip((page - 1) * limit)
       .limit(Number(limit));
 
-    handleSuccess(res, "Expertise retrieved successfully.", expertiseList);
+    handleSuccess(res, "تخصص با موفقیت دریافت شد.", expertiseList);
   } catch (error) {
     handleServerError(res, error);
   }
@@ -36,9 +36,9 @@ const getExpertiseById = async (req, res) => {
   try {
     const expertise = await Expertise.findById(req.params.id);
     if (!expertise) {
-      return handleNotFound(res, "Expertise not found.");
+      return handleNotFound(res, "تخصص یافت نشد.");
     }
-    handleSuccess(res, "Expertise retrieved successfully.", expertise);
+    handleSuccess(res, "تخصص با موفقیت دریافت شد.", expertise);
   } catch (error) {
     handleServerError(res, error);
   }
@@ -53,9 +53,9 @@ const updateExpertiseById = async (req, res) => {
       { new: true }
     );
     if (!updatedExpertise) {
-      return handleNotFound(res, "Expertise not found.");
+      return handleNotFound(res, "تخصص یافت نشد.");
     }
-    handleSuccess(res, "Expertise updated successfully.", updatedExpertise);
+    handleSuccess(res, "تخصص با موفقیت بروزرسانی شد.", updatedExpertise);
   } catch (error) {
     handleServerError(res, error);
   }
@@ -66,9 +66,9 @@ const deleteExpertiseById = async (req, res) => {
   try {
     const deletedExpertise = await Expertise.findByIdAndDelete(req.params.id);
     if (!deletedExpertise) {
-      return handleNotFound(res, "Expertise not found.");
+      return handleNotFound(res, "تخصص یافت نشد");
     }
-    handleSuccess(res, "Expertise deleted successfully.", deletedExpertise);
+    handleSuccess(res, "تخصص با موفقیت حذف شد.", deletedExpertise);
   } catch (error) {
     handleServerError(res, error);
   }

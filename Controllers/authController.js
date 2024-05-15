@@ -15,7 +15,7 @@ const registerUser = async (req, res) => {
     const user = await User.findOne({ phoneNumber });
 
     if (user) {
-      return handleBadRequest(res, "The user is already exist.");
+      return handleBadRequest(res, "کاربری با این شماره همراه وجود دارد. لطفا مقدار دیگری وارد نمایید.");
     }
 
     const hashedPassword = await hashPassword(password);
@@ -26,7 +26,7 @@ const registerUser = async (req, res) => {
       role,
     });
 
-    handleSuccess(res, "User registered successfully.", newUser);
+    handleSuccess(res, "کاربر با موفقیت ثبت نام شد.", newUser);
   } catch (error) {
     handleServerError(res, error);
   }
@@ -38,17 +38,17 @@ const loginUser = async (req, res) => {
     const user = await User.findOne({ phoneNumber });
 
     if (!user) {
-      return handleNotFound(res, "User not found.");
+      return handleNotFound(res, "کاربری یافت نشد.");
     }
 
     const passwordsMatch = await comparePassword(password, user.password);
     if (!passwordsMatch) {
-      return handleBadRequest(res, "Invalid credentials.");
+      return handleBadRequest(res, "اطلاعات ورود نادرست می باشد.");
     }
 
     const token = generateToken({ user }, "365d");
 
-    handleSuccess(res, "Login successful.", token);
+    handleSuccess(res, "ورود با موفقیت انجام شد.", token);
   } catch (error) {
     handleServerError(res, error);
   }
@@ -61,7 +61,7 @@ const changePassword = async (req, res) => {
     const user = await User.findOne({ phoneNumber });
 
     if (!user) {
-      return handleNotFound(res, "User not found.");
+      return handleNotFound(res, "کاربری یافت نشد.");
     }
 
     if (isPasswordValid(password)) {
@@ -74,12 +74,12 @@ const changePassword = async (req, res) => {
       });
 
       if (update) {
-        handleSuccess(res, "Password changed.", true);
+        handleSuccess(res, "رمزعبور با موفقیت تغییر پیدا کرد.", true);
       } else {
-        handleBadRequest(res, "Change password got an error.");
+        handleBadRequest(res, "تغییر رمزعبور با خطا مواجه شد.");
       }
     } else {
-      handleBadRequest(res, "Please provide a valid password.");
+      handleBadRequest(res, "لطفا یک رمزعبور معتبر وارد نمایید.");
     }
   } catch (error) {
     handleServerError(res, error);

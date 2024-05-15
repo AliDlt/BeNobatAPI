@@ -9,7 +9,7 @@ const {
 const createSecretary = async (req, res) => {
   try {
     const newSecretary = await Secretary.create(req.body);
-    handleSuccess(res, "Secretary created successfully.", newSecretary);
+    handleSuccess(res, "پذیرش با موفقیت ساخته شد.", newSecretary);
   } catch (error) {
     handleServerError(res, error);
   }
@@ -23,7 +23,7 @@ const getAllSecretaries = async (req, res) => {
       .skip((page - 1) * limit)
       .limit(Number(limit));
 
-    handleSuccess(res, "Secretaries retrieved successfully.", secretaries);
+    handleSuccess(res, "پذیرش ها با موفقیت دریافت شدند.", secretaries);
   } catch (error) {
     handleServerError(res, error);
   }
@@ -35,7 +35,7 @@ const getSecretaryById = async (req, res) => {
     if (!secretary) {
       return handleNotFound(res);
     }
-    handleSuccess(res, "Secretary retrieved successfully.", secretary);
+    handleSuccess(res, "پذیرش با موفقیت دریافت شد.", secretary);
   } catch (error) {
     handleServerError(res, error);
   }
@@ -51,7 +51,7 @@ const updateSecretaryById = async (req, res) => {
     if (!updatedSecretary) {
       return handleNotFound(res);
     }
-    handleSuccess(res, "Secretary updated successfully.", updatedSecretary);
+    handleSuccess(res, "پذیرش با موفقیت دریافت شد.", updatedSecretary);
   } catch (error) {
     handleServerError(res, error);
   }
@@ -63,7 +63,7 @@ const deleteSecretaryById = async (req, res) => {
     if (!deletedSecretary) {
       return handleNotFound(res);
     }
-    handleSuccess(res, "Secretary deleted successfully.", deletedSecretary);
+    handleSuccess(res, "پذیرش با موفقیت حذف شد.", deletedSecretary);
   } catch (error) {
     handleServerError(res, error);
   }

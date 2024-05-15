@@ -9,7 +9,7 @@ const {
 const createCustomer = async (req, res) => {
   try {
     const newCustomer = await Customer.create(req.body);
-    handleSuccess(res, "Customer created successfully.", newCustomer);
+    handleSuccess(res, "مشتری با موفقیت ساخته شد.", newCustomer);
   } catch (error) {
     handleServerError(res, error);
   }
@@ -23,7 +23,7 @@ const getAllCustomers = async (req, res) => {
       .skip((page - 1) * limit)
       .limit(Number(limit));
 
-    handleSuccess(res, "Customers retrieved successfully.", customers);
+    handleSuccess(res, "مشتری ها با موفقیت دریافت شدند.", customers);
   } catch (error) {
     handleServerError(res, error);
   }
@@ -35,7 +35,7 @@ const getCustomerById = async (req, res) => {
     if (!customer) {
       return handleNotFound(res);
     }
-    handleSuccess(res, "Customer retrieved successfully.", customer);
+    handleSuccess(res, "مشتری با موفقیت دریافت شد.", customer);
   } catch (error) {
     handleServerError(res, error);
   }
@@ -51,7 +51,7 @@ const updateCustomerById = async (req, res) => {
     if (!updatedCustomer) {
       return handleNotFound(res);
     }
-    handleSuccess(res, "Customer updated successfully.", updatedCustomer);
+    handleSuccess(res, "مشتری با موفقیت بروزرسانی شد.", updatedCustomer);
   } catch (error) {
     handleServerError(res, error);
   }
@@ -63,7 +63,7 @@ const deleteCustomerById = async (req, res) => {
     if (!deletedCustomer) {
       return handleNotFound(res);
     }
-    handleSuccess(res, "Customer deleted successfully.", deletedCustomer);
+    handleSuccess(res, "مشتری با موفقیت حذف شد.", deletedCustomer);
   } catch (error) {
     handleServerError(res, error);
   }

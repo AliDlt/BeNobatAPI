@@ -12,7 +12,7 @@ const createPaymentInformation = async (req, res) => {
     const newPaymentInfo = await PaymentInformation.create(req.body);
     handleSuccess(
       res,
-      "Payment information created successfully.",
+      "اطلاعات پرداخت با موفقیت ساخته شد.",
       newPaymentInfo
     );
   } catch (error) {
@@ -31,7 +31,7 @@ const getAllPaymentInformation = async (req, res) => {
 
     handleSuccess(
       res,
-      "Payment information retrieved successfully.",
+      "اطلاعات پرداخت با موفقیت دریافت شد.",
       paymentInfoList
     );
   } catch (error) {
@@ -44,11 +44,11 @@ const getPaymentInformationById = async (req, res) => {
   try {
     const paymentInfo = await PaymentInformation.findById(req.params.id);
     if (!paymentInfo) {
-      return handleNotFound(res, "Payment information not found.");
+      return handleNotFound(res, "اطلاعات پرداخت یافت نشد.");
     }
     handleSuccess(
       res,
-      "Payment information retrieved successfully.",
+      "اطلاعات پرداخت با موفقیت دریافت شد.",
       paymentInfo
     );
   } catch (error) {
@@ -65,11 +65,11 @@ const updatePaymentInformationById = async (req, res) => {
       { new: true }
     );
     if (!updatedPaymentInfo) {
-      return handleNotFound(res, "Payment information not found.");
+      return handleNotFound(res, "اطلاعات پرداخت یافت نشد.");
     }
     handleSuccess(
       res,
-      "Payment information updated successfully.",
+      "اطلاعات پرداخت با موفقیت بروزرسانی شد.",
       updatedPaymentInfo
     );
   } catch (error) {
@@ -84,11 +84,11 @@ const deletePaymentInformationById = async (req, res) => {
       req.params.id
     );
     if (!deletedPaymentInfo) {
-      return handleNotFound(res, "Payment information not found.");
+      return handleNotFound(res, "اطلاعات پرداخت یافت نشد.");
     }
     handleSuccess(
       res,
-      "Payment information deleted successfully.",
+      "اطلاعات پرداخت با موفقیت حذف شد.",
       deletedPaymentInfo
     );
   } catch (error) {

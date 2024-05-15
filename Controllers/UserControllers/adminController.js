@@ -9,7 +9,7 @@ const {
 const createAdmin = async (req, res) => {
   try {
     const newAdmin = await Admin.create(req.body);
-    handleSuccess(res, "Admin created successfully.", newAdmin);
+    handleSuccess(res, "مدیر با موفقیت ساخته شد.", newAdmin);
   } catch (error) {
     handleServerError(res, error);
   }
@@ -23,7 +23,7 @@ const getAllAdmins = async (req, res) => {
       .skip((page - 1) * limit)
       .limit(Number(limit));
 
-    handleSuccess(res, "Admins retrieved successfully.", admins);
+    handleSuccess(res, "مدیران با موفقیت دریافت شدند.", admins);
   } catch (error) {
     handleServerError(res, error);
   }
@@ -35,7 +35,7 @@ const getAdminById = async (req, res) => {
     if (!admin) {
       return handleNotFound(res);
     }
-    handleSuccess(res, "Admin retrieved successfully.", admin);
+    handleSuccess(res, "مدیر با موفقیت دریافت شد.", admin);
   } catch (error) {
     handleServerError(res, error);
   }
@@ -51,7 +51,7 @@ const updateAdminById = async (req, res) => {
     if (!updatedAdmin) {
       return handleNotFound(res);
     }
-    handleSuccess(res, "Admin updated successfully.", updatedAdmin);
+    handleSuccess(res, "مدیر با موفقیت بروزرسانی شد.", updatedAdmin);
   } catch (error) {
     handleServerError(res, error);
   }
@@ -63,7 +63,7 @@ const deleteAdminById = async (req, res) => {
     if (!deletedAdmin) {
       return handleNotFound(res);
     }
-    handleSuccess(res, "Admin deleted successfully.", deletedAdmin);
+    handleSuccess(res, "مدیر با موفقیت حذف شد.", deletedAdmin);
   } catch (error) {
     handleServerError(res, error);
   }

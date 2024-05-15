@@ -10,7 +10,7 @@ const {
 const createService = async (req, res) => {
   try {
     const newService = await Service.create(req.body);
-    handleSuccess(res, "Service created successfully.", newService);
+    handleSuccess(res, "سرویس با موفقیت افزوده شد.", newService);
   } catch (error) {
     handleServerError(res, error);
   }
@@ -25,7 +25,7 @@ const getAllServices = async (req, res) => {
       .skip((page - 1) * limit)
       .limit(Number(limit));
 
-    handleSuccess(res, "Services retrieved successfully.", services);
+    handleSuccess(res, "سرویس ها با موفقیت دریافت شدند.", services);
   } catch (error) {
     handleServerError(res, error);
   }
@@ -42,12 +42,12 @@ const getAllServicesByExpertId = async (req, res) => {
       .limit(Number(limit));
 
     if (!expert) {
-      return handleNotFound(res, "Expert not found.");
+      return handleNotFound(res, "تخصص پیدا نشد.");
     }
 
     const services = expert.services; // Assuming Expert model has a 'services' field
 
-    handleSuccess(res, "Services retrieved successfully.", services);
+    handleSuccess(res, "سرویس ها با موفقیت دریافت شدند.", services);
   } catch (error) {
     handleServerError(res, error);
   }
@@ -58,9 +58,9 @@ const getServiceById = async (req, res) => {
   try {
     const service = await Service.findById(req.params.id);
     if (!service) {
-      return handleNotFound(res, "Service not found.");
+      return handleNotFound(res, "سرویس پیدا نشد.");
     }
-    handleSuccess(res, "Service retrieved successfully.", service);
+    handleSuccess(res, "سرویس ها با موفقیت دریافت شدند.", service);
   } catch (error) {
     handleServerError(res, error);
   }
@@ -75,9 +75,9 @@ const updateServiceById = async (req, res) => {
       { new: true }
     );
     if (!updatedService) {
-      return handleNotFound(res, "Service not found.");
+      return handleNotFound(res, "سرویس یافت نشد.");
     }
-    handleSuccess(res, "Service updated successfully.", updatedService);
+    handleSuccess(res, "سرویس با موفقیت بروزرسانی شد.", updatedService);
   } catch (error) {
     handleServerError(res, error);
   }
@@ -88,9 +88,9 @@ const deleteServiceById = async (req, res) => {
   try {
     const deletedService = await Service.findByIdAndDelete(req.params.id);
     if (!deletedService) {
-      return handleNotFound(res, "Service not found.");
+      return handleNotFound(res, "سرویس پیدا نشد");
     }
-    handleSuccess(res, "Service deleted successfully.", deletedService);
+    handleSuccess(res, "سرویس با موفقیت حذف شد.", deletedService);
   } catch (error) {
     handleServerError(res, error);
   }

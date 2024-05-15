@@ -29,7 +29,7 @@ router.post("/upload", upload.array("image", 10), async (req, res) => {
     const files = req.files;
     if (!files || files.length === 0) {
       return res.status(400).json({
-        message: "No files uploaded.",
+        message: "هیچ عکسی آپلود نشد.",
         data: null,
         status: false,
       });
@@ -41,7 +41,7 @@ router.post("/upload", upload.array("image", 10), async (req, res) => {
     });
 
     res.status(201).json({
-      message: "Images uploaded successfully.",
+      message: "عکس ها با موفقیت آپلود شدند.",
       data: { imageUrls },
       status: true,
     });

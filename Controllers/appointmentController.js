@@ -10,7 +10,7 @@ const {
 const createAppointment = async (req, res) => {
   try {
     const newAppointment = await Appointment.create(req.body);
-    handleSuccess(res, "Appointment created successfully.", newAppointment);
+    handleSuccess(res, "نوبت با موفقیت ساخته شد.", newAppointment);
   } catch (error) {
     handleServerError(res, error);
   }
@@ -22,7 +22,7 @@ const getAllAppointments = async (req, res) => {
     const appointments = await Appointment.find()
       .skip((page - 1) * limit)
       .limit(Number(limit));
-    handleSuccess(res, "Appointments retrieved successfully.", appointments);
+    handleSuccess(res, "نوبت ها با موفقیت دریافت شدند.", appointments);
   } catch (error) {
     handleServerError(res, error);
   }
@@ -33,14 +33,14 @@ const getAllAppointmentsByExpertId = async (req, res) => {
     const { expertId, page = 1, limit = 10 } = req.query;
 
     if (!expertId) {
-      return handleBadRequest(res, "Expert ID is required.");
+      return handleBadRequest(res, "لطفا آیدی متخصص را وارد نمایید.");
     }
 
     const appointments = await Appointment.find({ expert: expertId })
       .skip((page - 1) * limit)
       .limit(Number(limit));
 
-    handleSuccess(res, "Appointments retrieved successfully.", appointments);
+    handleSuccess(res, "نوبت ها با موفقیت دریافت شدند.", appointments);
   } catch (error) {
     handleServerError(res, error);
   }
@@ -52,7 +52,7 @@ const getAppointmentById = async (req, res) => {
     if (!appointment) {
       return handleNotFound(res);
     }
-    handleSuccess(res, "Appointment retrieved successfully.", appointment);
+    handleSuccess(res, "نوبت با موفقیت دریافت شد.", appointment);
   } catch (error) {
     handleServerError(res, error);
   }
@@ -63,14 +63,14 @@ const getAllAppointmentsByUserId = async (req, res) => {
     const { userId, page = 1, limit = 10 } = req.query;
 
     if (!userId) {
-      return handleBadRequest(res, "User ID is required.");
+      return handleBadRequest(res, "لطفا آیدی کاربر را وارد نمایید.");
     }
 
     const appointments = await Appointment.find({ user: userId })
       .skip((page - 1) * limit)
       .limit(Number(limit));
 
-    handleSuccess(res, "Appointments retrieved successfully.", appointments);
+    handleSuccess(res, "نوبت ها با موفقیت دریافت شدند.", appointments);
   } catch (error) {
     handleServerError(res, error);
   }
@@ -86,7 +86,7 @@ const updateAppointmentById = async (req, res) => {
     if (!updatedAppointment) {
       return handleNotFound(res);
     }
-    handleSuccess(res, "Appointment updated successfully.", updatedAppointment);
+    handleSuccess(res, "نوبت با موفقیت بروزرسانی شد.", updatedAppointment);
   } catch (error) {
     handleServerError(res, error);
   }
@@ -100,7 +100,7 @@ const deleteAppointmentById = async (req, res) => {
     if (!deletedAppointment) {
       return handleNotFound(res);
     }
-    handleSuccess(res, "Appointment deleted successfully.", deletedAppointment);
+    handleSuccess(res, "نوبت با موفقیت حذف شد.", deletedAppointment);
   } catch (error) {
     handleServerError(res, error);
   }
